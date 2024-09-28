@@ -14,6 +14,19 @@ router.get("/", async (req, res) => {
   res.status(200).send(categoryList);
 });
 
+router.get("/:id", async (req,res)=>{
+  const id = req.params.id;
+
+  const iid = await Category.findById(id)
+
+  if(!iid){
+    return res.status(404).json({message:"not found any data"})
+  }
+
+  res.status(200).json({message:"ok found", iid})
+
+})
+
 router.post("/create", async (req, res) => {
   try {
     const categoriesData = req.body; 
@@ -71,5 +84,17 @@ router.patch("/:id", async (req,res) => {
 
 })
 
+router.delete("/:id", async(req,res)=>{
+  const id = await Category.findById(req.params.id)
+  console.log(id)
+
+  const dd = await Category.findByIdAndDelete(id)
+
+  if(!dd){
+    return res.status(400).json({message:"not able to delete"})
+  }
+
+  res.status(200).json({message:"deleted successfully!",dd})
+})
 
 module.exports = router;
